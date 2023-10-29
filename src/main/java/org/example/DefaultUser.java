@@ -24,7 +24,6 @@ public class DefaultUser implements User {
         return db.getUserByUsernameAndPassword(username, password);
     }
 
-
     @Override
     public User register(String username, String password, DataBase db) {
         User user = new DefaultUser(username, password);

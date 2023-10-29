@@ -20,6 +20,7 @@ public class UnitTests {
 
         Assertions.assertThat(db.getUserByUsernameAndPassword(username, password)).isEqualTo(user);
     }
+
     @Test
     @DisplayName("Проверка, что зарегистрированный пользователь имеет доступ к содержимому страницы")
     public void test2() {
@@ -35,7 +36,6 @@ public class UnitTests {
 
         Assertions.assertThat(mainPage.isAllowed(mainPage.authenticateUser(username, password, db))).isEqualTo(true);
     }
-
 
     @Test
     @DisplayName("Проверка, что пользователь возвращается при регистрации")
@@ -69,7 +69,6 @@ public class UnitTests {
 
         Assertions.assertThat(isValid).isEqualTo(false);
     }
-
 
     @Test
     @DisplayName("Проверка успешной валидации пароля")
