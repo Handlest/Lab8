@@ -10,27 +10,26 @@ public class UnitTests {
     public void test1() {
         String username = "Vasiliy";
         String password = "Password";
-
         User user = new DefaultUser(username, password);
 
         DataBase.addUser(user);
+        User userFromDB = DataBase.getUserByUsernameAndPassword(username, password);
 
-        Assertions.assertThat(DataBase.getUserByUsernameAndPassword(username, password)).isEqualTo(user);
+        Assertions.assertThat(userFromDB).isEqualTo(user);
     }
 
     @Test
     @DisplayName("Проверка, что зарегистрированный пользователь имеет доступ к содержимому страницы")
     public void test2() {
         MainPage mainPage = new MainPage();
-
         String username = "Vasiliy";
         String password = "Password";
-
         User user = new DefaultUser(username, password);
 
         DataBase.addUser(user);
+        boolean isUserAllowed = mainPage.isAllowed(mainPage.authenticateUser(username, password));
 
-        Assertions.assertThat(mainPage.isAllowed(mainPage.authenticateUser(username, password))).isEqualTo(true);
+        Assertions.assertThat(isUserAllowed).isEqualTo(true);
     }
 
     @Test
@@ -38,12 +37,12 @@ public class UnitTests {
     public void test3() {
         String username = "Vasiliy";
         String password = "Password";
-
         User user = new DefaultUser();
 
         user = user.register(username, password);
+        User userFromDB = DataBase.getUserByUsernameAndPassword(username, password);
 
-        Assertions.assertThat(user).isEqualTo(DataBase.getUserByUsernameAndPassword(username, password));
+        Assertions.assertThat(userFromDB).isEqualTo(user);
     }
 
     @Test
@@ -51,12 +50,10 @@ public class UnitTests {
     public void test4() {
         String username = "Vasiliy";
         String password = "Password";
-
+        String passwordToCheck = "Wrong password";
         User user = new DefaultUser();
 
         user = user.register(username, password);
-
-        String passwordToCheck = "Wrong password";
         boolean isValid = user.validatePassword(passwordToCheck);
 
         Assertions.assertThat(isValid).isEqualTo(false);
@@ -67,12 +64,10 @@ public class UnitTests {
     public void test5() {
         String username = "Vasiliy";
         String password = "Password";
-
+        String passwordToCheck = "Password";
         User user = new DefaultUser();
 
         user = user.register(username, password);
-
-        String passwordToCheck = "Password";
         boolean isValid = user.validatePassword(passwordToCheck);
 
         Assertions.assertThat(isValid).isEqualTo(true);
