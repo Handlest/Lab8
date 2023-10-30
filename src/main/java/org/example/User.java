@@ -2,14 +2,14 @@ package org.example;
 
 public interface User {
 
-    User authenticate(String username, String password, DataBase db);
+    User authenticate(String username, String password);
 
-    User register(String username, String password, DataBase db);
+    User register(String username, String password);
 
     String getUsername();
 
     String getPassword();
 
-    boolean validatePassword(String password, DataBase db);
+    boolean validatePassword(String password);
 
 }

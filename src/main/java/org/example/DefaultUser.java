@@ -20,15 +20,15 @@ public class DefaultUser implements User {
     }
 
     @Override
-    public User authenticate(String username, String password, DataBase db) {
-        return db.getUserByUsernameAndPassword(username, password);
+    public User authenticate(String username, String password) {
+        return DataBase.getUserByUsernameAndPassword(username, password);
     }
 
     @Override
-    public User register(String username, String password, DataBase db) {
+    public User register(String username, String password) {
         User user = new DefaultUser(username, password);
-        db.addUser(user);
-        return db.getUserByUsernameAndPassword(username, password);
+        DataBase.addUser(user);
+        return DataBase.getUserByUsernameAndPassword(username, password);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class DefaultUser implements User {
     }
 
     @Override
-    public boolean validatePassword(String password, DataBase db) {
-        return db.getUserByUsernameAndPassword(username, password) != null;
+    public boolean validatePassword(String password) {
+        return DataBase.getUserByUsernameAndPassword(username, password) != null;
     }
 }

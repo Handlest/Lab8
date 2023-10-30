@@ -1,9 +1,9 @@
 package org.example;
 
 public class MainPage implements WebPage {
-    User authenticateUser(String username, String password, DataBase db) {
+    User authenticateUser(String username, String password) {
         User user = new DefaultUser();
-        return user.authenticate(username, password, db);
+        return user.authenticate(username, password);
     }
 
     boolean isAllowed(User user) {
