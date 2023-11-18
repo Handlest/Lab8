@@ -108,4 +108,23 @@ public class UnitTests {
         MainPage darkPage = new MainPage(darkFactory);
         darkPage.display();
     }
+
+    @Test
+    @DisplayName("Проверка прокси")
+    public void test8() {
+        String username1 = "User1";
+        String username2 = "User2";
+        String password1 = "Password";
+        String password2 = "Short";
+        //Создаём пользователей
+        User user1 = new DefaultUser(username1, password1);
+        User user2 = new DefaultUser(username2, password2);
+        //Создаём список пользователей и добавляем их в базу данных с помощью защищающего прокси DataBaseManager
+        DataBaseManager.addUser(user1);
+        DataBaseManager.addUser(user2);
+
+        //Проверка, что только пользователи с правильным паролем были добавлены в базу данных
+        Assertions.assertThat(DataBaseManager.getUserByUsernameAndPassword(username1, password1)).isEqualTo(user1);
+        Assertions.assertThat(DataBaseManager.getUserByUsernameAndPassword(username2, password2)).isEqualTo(null);
+    }
 }
