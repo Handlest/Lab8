@@ -2,7 +2,7 @@ package org.example;
 
 public class DefaultUser implements User {
     private final boolean isStaff = false;
-    private final boolean isSuperUser = false;
+    private boolean isSuperUser = false;
     private boolean isActive = false;
 
     private String username;
@@ -15,6 +15,13 @@ public class DefaultUser implements User {
         this.isActive = true;
     }
 
+    public DefaultUser(String username, String password, boolean isSuperUser) {
+        this.username = username;
+        this.password = password;
+        this.isActive = true;
+        this.isSuperUser = isSuperUser;
+    }
+
     public DefaultUser() {
 
     }
@@ -25,7 +32,7 @@ public class DefaultUser implements User {
     }
 
     @Override
-    public User register(String username, String password) {
+    public User register() {
         User user = new DefaultUser(username, password);
         DataBase.addUser(user);
         return DataBase.getUserByUsernameAndPassword(username, password);
