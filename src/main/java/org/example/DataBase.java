@@ -3,14 +3,19 @@ package org.example;
 import java.util.HashMap;
 
 public class DataBase {
-    HashMap<String, User> db = new HashMap<>();
 
-    public void addUser(User user) {
-        db.put(user.getUsername(), user);
+    private DataBase() {
+
     }
 
-    public User getUserByUsernameAndPassword(String username, String password) {
-        User user = db.get(username);
+    private static final HashMap<String, User> DB = new HashMap<>();
+
+    public static void addUser(User user) {
+        DB.put(user.getUsername(), user);
+    }
+
+    public static User getUserByUsernameAndPassword(String username, String password) {
+        User user = DB.get(username);
         return user.getPassword().equals(password) ? user : null;
     }
 }
