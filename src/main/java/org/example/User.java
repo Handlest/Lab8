@@ -12,4 +12,5 @@ public interface User {
 
     boolean validatePassword(String password);
 
+    boolean isSuperUser();
 }

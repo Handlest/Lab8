@@ -98,12 +98,13 @@ public class UnitTests {
     @Test
     @DisplayName("Проверка абстрактной фабрики для отрисовки страниц")
     public void test7() {
+        User user = new DefaultUser();
         PageFactory lightFactory = new LightPageFactory();
-        MainPage lightPage = new MainPage(lightFactory);
+        MainPage lightPage = new MainPage(lightFactory, user);
         lightPage.display();
 
         PageFactory darkFactory = new DarkPageFactory();
-        MainPage darkPage = new MainPage(darkFactory);
+        MainPage darkPage = new MainPage(darkFactory, user);
         darkPage.display();
     }
 
@@ -123,5 +124,22 @@ public class UnitTests {
         //Проверка, что только пользователи с правильным паролем были добавлены в базу данных
         Assertions.assertThat(DataBaseManager.getUserByUsernameAndPassword(username1, password1)).isEqualTo(user1);
         Assertions.assertThat(DataBaseManager.getUserByUsernameAndPassword(username2, password2)).isEqualTo(null);
+    }
+
+    @Test
+    @DisplayName("Паттерн состояние для двух пользователей с разными правами")
+    public void test9() {
+        System.out.println("Отображение для обычного пользователя\n");
+        User user = new DefaultUser("Riko", "password");
+        PageFactory darkFactory = new DarkPageFactory();
+        MainPage darkPage = new MainPage(darkFactory, user);
+        darkPage.display();
+
+        System.out.println("\nОтображение для суперпользователя\n");
+
+        User superUser = new SuperUser("Admin", "Admin");
+        PageFactory darkFactory2 = new DarkPageFactory();
+        MainPage darkPage2 = new MainPage(darkFactory2, superUser);
+        darkPage2.display();
     }
 }

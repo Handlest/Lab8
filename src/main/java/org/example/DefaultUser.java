@@ -52,4 +52,8 @@ public class DefaultUser implements User {
     public boolean validatePassword(String password) {
         return DataBase.getUserByUsernameAndPassword(username, password) != null;
     }
+    @Override
+    public boolean isSuperUser(){
+        return this.isSuperUser;
+    }
 }

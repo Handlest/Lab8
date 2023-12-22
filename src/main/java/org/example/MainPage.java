@@ -1,6 +1,5 @@
 package org.example;
 
-
 //Абстрактные классы
 abstract class Button {
     public abstract void display();
@@ -73,14 +72,26 @@ class DarkPageFactory extends PageFactory {
 public class MainPage {
     private Button button;
     private TextField textField;
+    private User user;
+    PageState currentState; // Состояние позволяет контролировать содержимое страницы в зависимости от прав пользователя
 
-    public MainPage(PageFactory factory) {
+    public MainPage(PageFactory factory, User user) {
+        this.user = user;
         button = factory.createButton();
         textField = factory.createTextField();
+        currentState = new DefaultState(); // Базовое состояние по умолчанию
     }
 
     public void display() {
         button.display();
         textField.display();
+        if (user.isSuperUser()){
+            setState(new SuperUserState());
+        }
+        currentState.displayContent(); // Отображение содержимого страницы с помощью переопределённого для двух классов метода
+    }
+
+    private void setState(PageState state) {
+        currentState = state; // При необходимости смены состояния, вызывается данная функция
     }
 }
