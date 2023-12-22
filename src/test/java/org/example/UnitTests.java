@@ -3,8 +3,6 @@ package org.example;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class UnitTests {
@@ -122,7 +120,6 @@ public class UnitTests {
         //Создаём список пользователей и добавляем их в базу данных с помощью защищающего прокси DataBaseManager
         DataBaseManager.addUser(user1);
         DataBaseManager.addUser(user2);
-
         //Проверка, что только пользователи с правильным паролем были добавлены в базу данных
         Assertions.assertThat(DataBaseManager.getUserByUsernameAndPassword(username1, password1)).isEqualTo(user1);
         Assertions.assertThat(DataBaseManager.getUserByUsernameAndPassword(username2, password2)).isEqualTo(null);
