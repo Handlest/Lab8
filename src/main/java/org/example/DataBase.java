@@ -8,7 +8,6 @@ public class DataBase {
 
     }
     private static final HashMap<String, User> DB = new HashMap<>();
-    private static final HashMap<String, PageFlyweight> CACHE = new HashMap<>();
 
     protected static void addUser(User user) {
         DB.put(user.getUsername(), user);

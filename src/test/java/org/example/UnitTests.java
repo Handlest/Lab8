@@ -145,4 +145,17 @@ public class UnitTests {
 
         System.out.println("Страницы в кэше:  " + page.getCachedPages());
     }
+
+
+    @Test
+    @DisplayName("Паттерн стратегия для определения доступа пользователя")
+    public void test10() {
+        User user = new DefaultUser("Василий", "Пароль");
+        User superUser = new SuperUser("Admin", "p@ssw0rd");
+        var access1 = AccessManager.hasAccess(user);
+        var access2 = AccessManager.hasAccess(superUser);
+
+        Assertions.assertThat(access1).isEqualTo(false);
+        Assertions.assertThat(access2).isEqualTo(true);
+    }
 }
