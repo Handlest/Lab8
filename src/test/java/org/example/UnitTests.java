@@ -95,18 +95,18 @@ public class UnitTests {
         Assertions.assertThat(DataBase.getUserByUsernameAndPassword(username2, password)).isEqualTo(superUser);
     }
 
-    @Test
-    @DisplayName("Проверка абстрактной фабрики для отрисовки страниц")
-    public void test7() {
-        User user = new DefaultUser();
-        PageFactory lightFactory = new LightPageFactory();
-        MainPage lightPage = new MainPage(lightFactory, user);
-        lightPage.display();
-
-        PageFactory darkFactory = new DarkPageFactory();
-        MainPage darkPage = new MainPage(darkFactory, user);
-        darkPage.display();
-    }
+//    @Test
+//    @DisplayName("Проверка абстрактной фабрики для отрисовки страниц")
+//    public void test7() {
+//        User user = new DefaultUser();
+//        PageFactory lightFactory = new LightPageFactory();
+//        MainPage lightPage = new MainPage(lightFactory, user);
+//        lightPage.display();
+//
+//        PageFactory darkFactory = new DarkPageFactory();
+//        MainPage darkPage = new MainPage(darkFactory, user);
+//        darkPage.display();
+//    }
 
     @Test
     @DisplayName("Проверка прокси")
@@ -127,19 +127,22 @@ public class UnitTests {
     }
 
     @Test
-    @DisplayName("Паттерн состояние для двух пользователей с разными правами")
+    @DisplayName("Паттерн легковес для кэширования страниц")
     public void test9() {
-        System.out.println("Отображение для обычного пользователя\n");
+        PageFactory pageFactory = new PageFactory();
+        System.out.println("Создание первой страницы\n");
         User user = new DefaultUser("Riko", "password");
-        PageFactory darkFactory = new DarkPageFactory();
-        MainPage darkPage = new MainPage(darkFactory, user);
-        darkPage.display();
+        MainPage page = new MainPage(pageFactory, user);
+        page.display();
 
-        System.out.println("\nОтображение для суперпользователя\n");
+        System.out.println("Страницы в кэше:  " + page.getCachedPages());
 
-        User superUser = new SuperUser("Admin", "Admin");
-        PageFactory darkFactory2 = new DarkPageFactory();
-        MainPage darkPage2 = new MainPage(darkFactory2, superUser);
-        darkPage2.display();
+
+        System.out.println("Создание второй страницы\n");
+        User user2 = new DefaultUser("Riko", "password");
+        MainPage page2 = new MainPage(pageFactory, user2);
+        page2.display();
+
+        System.out.println("Страницы в кэше:  " + page.getCachedPages());
     }
 }

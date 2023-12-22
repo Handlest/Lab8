@@ -1,94 +1,60 @@
 package org.example;
 
-//Абстрактные классы
-abstract class Button {
-    public abstract void display();
-}
-abstract class TextField {
-    public abstract void display();
-}
-
-
-
-//Реализации абстрактных классов
-class LightButton extends Button {
-    @Override
-    public void display() {
-        System.out.println("Light Button displayed");
-    }
-}
-class DarkButton extends Button {
-    @Override
-    public void display() {
-        System.out.println("Dark Button displayed");
-    }
-}
-class LightTextField extends TextField {
-    @Override
-    public void display() {
-        System.out.println("Light Text Field displayed");
-    }
-}
-class DarkTextField extends TextField {
-    @Override
-    public void display() {
-        System.out.println("Dark Text Field displayed");
-    }
-}
-
-// Абстрактная фабрика для создания элементов интерфейса веб-страницы
-abstract class PageFactory {
-    public abstract Button createButton();
-    public abstract TextField createTextField();
-}
-
-// Фабрика для создания элементов интерфейса веб-страницы в светлой теме
-class LightPageFactory extends PageFactory {
-    @Override
-    public Button createButton() {
-        return new LightButton();
-    }
-
-    @Override
-    public TextField createTextField() {
-        return new LightTextField();
-    }
-}
-
-// Фабрика для создания элементов интерфейса веб-страницы в темной теме
-class DarkPageFactory extends PageFactory {
-    @Override
-    public Button createButton() {
-        return new DarkButton();
-    }
-
-    @Override
-    public TextField createTextField() {
-        return new DarkTextField();
-    }
-}
+import java.util.HashMap;
+import java.util.Map;
 
 // Клиент - веб-страница
 public class MainPage {
-    private Button button;
-    private TextField textField;
     private User user;
-    PageState currentState; // Состояние позволяет контролировать содержимое страницы в зависимости от прав пользователя
+    private PageFactory factory;
+    PageState currentState;
+
+    private Map<String, PageFlyweight> cachedPages = new HashMap<>();
 
     public MainPage(PageFactory factory, User user) {
         this.user = user;
-        button = factory.createButton();
-        textField = factory.createTextField();
+        this.factory = factory;
         currentState = new DefaultState(); // Базовое состояние по умолчанию
     }
 
     public void display() {
-        button.display();
-        textField.display();
         if (user.isSuperUser()){
             setState(new SuperUserState());
         }
+        // Получаем тип страницы, который нужно отобразить в зависимости от прав пользователя
+        String pageType = getCurrentPageType();
+
+        // Получаем легковесный объект страницы из хранилища или создаем новый, если его еще нет
+        PageFlyweight page = getCachedPage(pageType);
+
+        // Отображаем содержимое страницы
+        System.out.println(page.getContent());
+
         currentState.displayContent(); // Отображение содержимого страницы с помощью переопределённого для двух классов метода
+    }
+
+    private String getCurrentPageType() {
+        if (user.isSuperUser()) {
+            return "SuperUser";
+        } else {
+            return "Default";
+        }
+    }
+
+    private PageFlyweight getCachedPage(String pageType) {
+        PageFlyweight page = cachedPages.get(pageType);
+
+        if (page == null) {
+            // Получаем легковесный объект страницы из фабрики и добавляем его в кэш
+            page = factory.getPage(pageType);
+            cachedPages.put(pageType, page);
+        }
+
+        return page;
+    }
+
+    public Map<String, PageFlyweight> getCachedPages() {
+        return cachedPages;
     }
 
     private void setState(PageState state) {
